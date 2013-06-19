@@ -2,7 +2,7 @@
 class gerrit::params {
   # Version of gerrit
   $gerrit_version = $::operatingsystem ? {
-    default => '2.5',
+    default => '2.5.4',
   }
   # Group which gerrit is in
   $gerrit_group = $::operatingsystem ? {
@@ -42,11 +42,19 @@ class gerrit::params {
     /(?i:Debian|Ubuntu|Mint)/ => 'openjdk-6-jdk',
     default                   => 'java-1.6.0-openjdk',
   }
+  
+  $gerrit_java_home = $::operatingsystem ? {
+    /(?i:Debian|Ubuntu|Mint)/ => $::architecture ? {
+      'amd64' => '/usr/lib/jvm/java-6-openjdk-amd64/jre',
+      default => '/usr/lib/jvm/java-6-openjdk-amd64/jre',
+    },
+    default                   => '/usr/lib/jvm/java-6-openjdk/jre',
+  }
 
   # 
   $canonical_web_url = "http://$fqdn:8080/"
   # 
-  $https_listen_url = "http://*:8080/"
+  $httpd_listen_url = "http://*:8080/"
 
   $sshd_listen_address = "*:29468"
 }
